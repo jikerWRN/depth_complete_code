@@ -1,3 +1,3 @@
-# depth_complete_code
+# depth_completion_code
 
-This repo contains some code for depth complete.
+This repo contains some code for depth completion.
