@@ -1,0 +1,16 @@
+import torch.nn as nn
+
+
+class MaskedMSELoss(nn.Module):
+    """docstring for MaskedMSELoss"""
+    def __init__(self):
+        super(MaskedMSELoss, self).__init__()
+        self.loss = 0
+
+    def forward(self，pred, target):
+        assert pred.dim() == target.dim(), 'inconsistent dimensions'
+        valid_mask = (target > 0).detach()
+        diff = target - pred
+        diff = diff[valid_mask]
+        self.loss = (diff ** 2).mean()
+        return self.loss
