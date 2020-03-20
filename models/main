@@ -1,0 +1,2 @@
+def _make_gud_up_conv_layer(self, up_proj_block, in_channels, out_channels, oheight, oweight):
+    return up_proj_block(in_channels, out_channels, oheight, oweight)
