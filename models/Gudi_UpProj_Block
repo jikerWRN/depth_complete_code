@@ -1,0 +1,32 @@
+class Gudi_UpProj_Block(nn.Module):
+    def __init__(self, in_channels, out_channels, oheight=0, oweight=0):
+        super(Gudi_UpProj_Block, self).__init__()
+        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=5, stride=1, padding=2, bias=False)
+        self.bn1 = nn.BatchNorm2d(out_channels)
+        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=1, padding=1, bias=False)
+        self.bn2 = nn.BatchNorm2d(out_channels)
+        self.sc_conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=5, stride=1, padding=2, bias=False)
+        self.sc_bn1 = nn.BatchNorm2d(out_channels)
+        self.relu = nn.ReLU(inplace=True)
+        self.oheight = oheight
+        self.oweight = oweight
+
+    def _up_pooling(self, x, scale):
+        x = nn.Upsample(scale_factor=scale, mode='nearest')(x)
+        if self.oheight != 0 and self.oweight != 0:
+            x = x[:, :, 0:self.oheight, 0:self.oweight]
+        mask = torch.zeros_like(x)
+        for h in range(0, self.oheight, 2):
+            for w in range(0, self.oweight, 2):
+                mask[:, :, h, w] = 1
+        x = torch.mul(mask, x)
+        return x
+
+    def forward(self, x):
+        x = self._up_pooling(x, 2)
+        out = self.relu(self.bn1(self.conv1(x)))
+        out = self.bn2(self.conv2(out))
+        short_cut = self.sc_bn1(self.sc_conv1(x))
+        out += short_cut
+        out = self.relu(out)
+        return out
