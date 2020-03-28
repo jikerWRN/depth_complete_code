@@ -1,0 +1,14 @@
+    error_result = utils.evaluate_error(gt_depth=targets, pred_depth=outputs)
+
+    total_step_val += args.batch_size_eval
+    error_avg = utils.avg_error(error_sum_val,
+                                error_result,
+                                total_step_val,
+                                args.batch_size_eval)
+    utils.print_error('eval_result: step(average)',
+                      epoch, batch_idx,
+                      loss, error_result, error_avg)
+    utils.save_eval_img(args.data_set, args.best_model_dir, batch_idx,
+                        inputs.data.cpu(), raw_rgb, targets, outputs)
+
+utils.print_single_error(epoch, batch_idx, loss, error_avg)
