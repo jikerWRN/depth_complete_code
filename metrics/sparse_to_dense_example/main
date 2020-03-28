@@ -1,0 +1,16 @@
+result = Result()
+result.evaluate(targets, outputs)
+average_meter.update(result, gpu_time, data_time, targets.size(0))
+
+if (batch_idx+1) % 10 == 0:
+    print('Test: [{0}/{1}]\t'
+          't_GPU={gpu_time:.3f}({average.gpu_time:.3f})\n\t'
+          'RMSE={result.rmse:.2f}({average.rmse:.2f}) '
+          'MAE={result.mae:.2f}({average.mae:.2f}) '
+          'Delta1={result.delta1:.3f}({average.delta1:.3f}) '
+          'REL={result.absrel:.3f}({average.absrel:.3f}) '
+          'Lg10={result.lg10:.3f}({average.lg10:.3f}) '.format(batch_idx+1,
+                                                               len(valloader),
+                                                               gpu_time=gpu_time,
+                                                               result=result,
+                                                               average=average_meter.average()))
