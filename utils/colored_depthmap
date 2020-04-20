@@ -12,3 +12,56 @@ def colored_depthmap(depth, d_min=None, d_max=None):
         d_max = np.max(depth)
     depth_relative = (depth - d_min) / (d_max - d_min)
     return 255 * cmap(depth_relative)[:, :, :3]     # H, W, C
+    
+    
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    
+    
+    """
+show depth image in color
+"""
+import cv2
+import time
+import numpy as np
+from PIL import Image
+import matplotlib.pyplot as plt
+cmap = plt.cm.viridis
+
+
+def colored_depthmap(depth, d_min=None, d_max=None):
+    if d_min is None:
+        d_min = np.min(depth)
+    if d_max is None:
+        d_max = np.max(depth)
+    depth_relative = (depth - d_min) / (d_max - d_min)
+    return 255 * cmap(depth_relative)[:, :, :3]     # H, W, C
+
+if __name__ == '__main__':
+    depth_annotated = Image.open('./0000001164_annotated.png')
+    depth_raw = Image.open('./0000001164_raw.png')
+    rgb = Image.open('./0000001164_raw.png')
+
+    depth_raw_colored = colored_depthmap(depth_raw)
+    depth_annotated_colored = colored_depthmap(depth_annotated)
+
+    # depth_imerged = np.vstack([rgb, depth_raw_colored])
+
+    rgb_depth_imerged = Image.fromarray(depth_imerged.astype('uint8'))
+    depth_raw_colored = Image.fromarray(depth_raw_colored.astype('uint8'))
+    depth_annotated_colored = Image.fromarray(depth_annotated_colored.astype('uint8'))
+
+    # depth_imerged.save('./rgb_depth_imerged.jpg')
+    depth_raw_colored.save('./depth_rae_color.jpg')
+    depth_annotated_colored.save('./depth_annotated_color.jpg')
+    # img_merge.show()
+    # time.sleep(60)
+
+    # cv2.imshow('raw', img_merge)
+    # cv2.waitKey(0)
+
+
+    # print(1)
+
+
