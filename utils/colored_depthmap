@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+cmap = plt.cm.viridis
+
 """
 show depth image in color
 """
